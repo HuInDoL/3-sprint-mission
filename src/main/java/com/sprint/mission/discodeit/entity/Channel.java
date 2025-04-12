@@ -1,80 +1,55 @@
 package com.sprint.mission.discodeit.entity;
 
+import java.util.*;
 import java.util.UUID;
 
-public class Channel {
-    private UUID id;
-    private int age;
-    private String name;
-    private String email;
-    private long createdAt;
-    private long updatedAt;
+public class Channel extends Base {
+    private String channelName;
+    private List<User> members = new ArrayList<>(); // Channel List안에 members List를 넣고 member와 message로 이루어진 LinkedList를 만들고 싶음
+    private UUID channelId;
 
-    public Channel() {
+    public Channel(String channelName, User user) {
+        super();
+        this.channelName = channelName;
+        this.members.add(user);
     }
 
-    public Channel(UUID id, int age, String name, String email, long createdAt, long updatedAt) {
-        this.id = id;
-        this.age = age;
-        this.name = name;
-        this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+
+    // Gettter Method
+
+    public String getChannelName() {
+        return this.channelName;
     }
+
+    public List<User> getMembers() {
+        return this.members;
+    }
+
 
     // Update Method
-    public void update(String name, int age) {
-        this.name = name;
-        this.age = age;
+
+    public void updateChannelId(UUID channelId) {
+        this.channelId = super.getId();
+        super.updateUpdatedAt();
     }
 
-    // Getter Methods
-    public UUID getId() {
-        return id;
+    public void updateChannelName(String channelName) {
+        this.channelName = channelName;
+        super.updateUpdatedAt();
     }
 
-    // Setter Methods
-    public void setId(UUID id) {
-        this.id = id;
+    public void updateMembers(List<User> members) {
+        this.members = new ArrayList<>(members);
+        super.updateUpdatedAt();
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(long updatedAt) {
-        this.updatedAt = updatedAt;
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "name='" + getChannelName() + '\'' +
+                ", channelId='" + getId() + '\'' +
+                ", createdAt='" + getCreatedAt() + '\'' +
+                ", updatedAt='" + getUpdatedAt() + '\'' +
+                '}';
     }
 }

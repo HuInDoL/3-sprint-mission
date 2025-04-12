@@ -1,97 +1,57 @@
 package com.sprint.mission.discodeit.entity;
 
-import java.time.LocalDateTime;
+
 import java.util.UUID;
 
-public class Message {
-    private UUID id;
-    private int age;
-    private String name;
-    private String email;
-    private String content;
-    private LocalDateTime sentAt;
-    private long createdAt;
-    private long updatedAt;
+public class Message extends Base {
+    private User user;
+    private Channel channel; // 이걸 Channel 클래스와 어떻게 연결시키지
+    private String message; // message는 결국 HashSet이야
 
-    public Message() {
+    public Message(User user, Channel channel, String message) {
+        super();
+        this.user = user;
+        this.channel = channel;
+        this.message = message;
     }
 
-    public Message(UUID id, int age, String name, String email, long createdAt, long updatedAt) {
-        this.id = id;
-        this.age = age;
-        this.name = name;
-        this.email = email;
-        this.content = "";
-        this.sentAt = LocalDateTime.now();
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     // Getter Methods
-    public UUID getId() {
-        return id;
-    }
 
-    public int getAge() {
-        return age;
-    }
+    public User getUser() { return user; }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
+    public Channel getChannel() { return channel; }
 
     public String getContent() {
-        return content;
-    }
-
-    public LocalDateTime getSentAt() {
-        return sentAt;
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public long getUpdatedAt() {
-        return updatedAt;
+        return message;
     }
 
 
-    // Setter Methods
-    public void setId(UUID id) {
-        this.id = id;
+    // Update Method
+
+    public void updateUser(UUID id) {
+        this.user = super.getId();
+        super.updateUpdatedAt();
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void updateChannel(Channel channel) {
+        this.channel = channel;
+        super.updateUpdatedAt();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void updateMessage(String message) {
+        this.message = message;
+        super.updateUpdatedAt();
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setSentAt(LocalDateTime sentAt) {
-        this.sentAt = sentAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
+    @Override
+    public String toString() {
+        return "Message{" +
+                "message='" + getContent() + '\'' +
+                ", user='" + getUser().getName() + '\'' +
+                ", channel='" + getChannel().getChannelName() + '\'' +
+                ", id='" + getId() + '\'' +
+                ", createdAt='" + getCreatedAt() + '\'' +
+                ", updatedAt='" + getUpdatedAt() + '\'' +
+                '}';
 }

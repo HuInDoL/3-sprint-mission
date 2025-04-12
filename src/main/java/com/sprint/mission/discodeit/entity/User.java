@@ -1,32 +1,20 @@
 package com.sprint.mission.discodeit.entity;
 
-import com.sprint.mission.discodeit.entity.Base;
-import java.util.UUID;
 
-public class User {
-    private UUID id;
+public class User extends Base {
     private int age;
     private String name;
     private String email;
-    // @CreatedDate 는 Spring 전용
-    private long createdAt;
-    // @CreatedDate
-    private long updatedAt;
 
-    public User() {
-    }
-
-    public User(UUID id, int age, String name, String email, long createdAt, long updatedAt) {
-        this.id = id;
+    public User(String name, int age, String email) {
+        super();
         this.age = age;
         this.name = name;
         this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
-    // Getter Methods
-    public UUID getId() { return id; }
+
+    // Getter Method
 
     public int getAge() { return age; }
 
@@ -34,33 +22,33 @@ public class User {
 
     public String getEmail() { return email; }
 
-    public long getCreatedAt() { return createdAt; }
 
-    public long getUpdatedAt() { return updatedAt; }
+    // Update Method
 
-
-    // Setter Methods
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setAge(int age) {
+    public void updateAge(int age) {
         this.age = age;
+        super.updateUpdatedAt();
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         this.name = name;
+        super.updateUpdatedAt();
     }
 
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
+        super.updateUpdatedAt();
     }
 
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(long updatedAt) {
-        this.updatedAt = updatedAt;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", age=" + getAge() +
+                ", email='" + getEmail() + '\'' +
+                ", createdAt='" + getCreatedAt() + '\'' +
+                ", updatedAt='" + getUpdatedAt() + '\'' +
+                '}';
     }
 }
