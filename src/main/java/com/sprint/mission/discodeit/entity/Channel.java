@@ -19,8 +19,7 @@ public class Channel implements Serializable {
     private ChannelType type;
     private String name;
     private String description;
-    //
-    private ReadStatus readStatus;
+
 
     public Channel(ChannelType type, String name, String description) {
         this.id = UUID.randomUUID();
@@ -29,8 +28,6 @@ public class Channel implements Serializable {
         this.type = type;
         this.name = name;
         this.description = description;
-        //
-        this.readStatus = null; // 채널을 읽은 유저들의 상태
     }
 
 //    public UUID getId() {

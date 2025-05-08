@@ -1,24 +1,28 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.ChannelType;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.entity.*;
+import com.sprint.mission.discodeit.entity.dto.CreateBinaryContentRequest;
+import com.sprint.mission.discodeit.entity.dto.CreateUserRequest;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.Optional;
 
 @SpringBootApplication
 public class DiscodeitApplication {
 
-//	static User setupUser(UserService userService) {
-//		User user = userService.create("woody", "woody@codeit.com", "woody1234");
-//		return user;
-//	}
+	static User setupUser(UserService userService) {
+		CreateUserRequest createUserRequest = new CreateUserRequest("임정현", "1234wjdgusdl", "12345678");
+//		Optional<CreateBinaryContentRequest> createBinaryContentRequest = new CreateBinaryContentRequest("profileImage", FileType.IMAGE);
+		User user = userService.create(createUserRequest, Optional.empty());
+		return user;
+	}
 
 	static Channel setupChannel(ChannelService channelService) {
 		Channel channel = channelService.create(ChannelType.PUBLIC, "공지", "공지 채널입니다.");
@@ -32,8 +36,8 @@ public class DiscodeitApplication {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(DiscodeitApplication.class, args);
-
+//		SpringApplication.run(DiscodeitApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(DiscodeitApplication.class, args);
 		// 서비스 초기화
 		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		ChannelService channelService = (ChannelService) context.getBean("basicChannelService");

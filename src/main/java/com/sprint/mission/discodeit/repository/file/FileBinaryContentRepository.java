@@ -2,12 +2,16 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@ConditionalOnProperty(name = "discodeit.repository.type", havingValue = "file")
+@Repository
 public class FileBinaryContentRepository implements BinaryContentRepository {
 
     private final Path DIRECTORY;
@@ -56,7 +60,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     public List<BinaryContent> findAllByIdIn(List<UUID> ids) {
         List<BinaryContent> binaryContents = new ArrayList<>();
         for (UUID id : ids) {
-            BinaryContent binaryContent = findById(id);
+            BinaryContent binaryContent = this.findById(id);
             if (binaryContent != null) {
                 binaryContents.add(binaryContent);
             }

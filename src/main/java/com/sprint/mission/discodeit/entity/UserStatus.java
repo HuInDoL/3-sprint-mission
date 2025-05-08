@@ -1,26 +1,21 @@
 package com.sprint.mission.discodeit.entity;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Getter
-public class UserStatus {
-
-    @Serial
+public class UserStatus implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
     //
     private UUID userId;
-    private Instant lastLoginAt;
+    private Instant lastActiveAt;
 
     public UserStatus(User user) {
 
@@ -31,18 +26,20 @@ public class UserStatus {
         //
         this.userId = user.getId();
 
-        this.lastLoginAt = this.createdAt;
+        this.lastActiveAt = this.createdAt;
 
     }
 
-    public boolean isCurrenlyLoggedIn() {
-        return lastLoginAt.plusSeconds(300).isAfter(Instant.now()); // true: 로그인
+    public boolean isOnline() {
+//        Instant instantFiveMinutesAgo = Instant.now().minus(Duration.ofMinutes(5));
+//        return lastLoginAt.isAfter((instantFiveMinutesAgo));
+        return lastActiveAt.plusSeconds(300).isAfter(Instant.now()); // true: 로그인
     }
 
     public void update() {
         boolean anyValueUpdated = false;
-        if (this.isCurrenlyLoggedIn()) {
-            this.lastLoginAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        if (this.isOnline()) {
+            this.lastActiveAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
             anyValueUpdated = true;
         }
 

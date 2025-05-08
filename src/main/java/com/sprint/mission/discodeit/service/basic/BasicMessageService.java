@@ -22,7 +22,7 @@ public class BasicMessageService implements MessageService {
     //
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-    BinaryContentRepository binaryContentRepository;
+    private final BinaryContentRepository binaryContentRepository;
 
     @Override
     public Message create(CreateMessageRequest request) {

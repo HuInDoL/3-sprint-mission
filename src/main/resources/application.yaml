@@ -1,4 +1,4 @@
 discodeit:
   repository:
     type: jcf
-    file-directory: .discodeit
+    file-directory: .discodeit # @Value 어노테이션으로 파일 저장 위치 설정 가능

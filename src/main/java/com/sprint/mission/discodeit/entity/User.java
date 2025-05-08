@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.entity;
 
-import com.sprint.mission.discodeit.entity.dto.CreateUserRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,10 +23,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     //
-    private UserStatus userStatus;
-    private ReadStatus readStatus;
 
-    @Setter
     private UUID profileId;
 
     public User(String username, String email, String password, UUID profileId) {
@@ -39,11 +35,9 @@ public class User implements Serializable {
         this.password = password;
         //
         this.profileId = profileId;
-        this.userStatus = null;
-        this.readStatus = null;
     }
 
-    public void update(String newUsername, String newEmail, String newPassword /*,UUID newProfileId*/) {
+    public void update(String newUsername, String newEmail, String newPassword ,UUID newProfileId) {
         boolean anyValueUpdated = false;
         if (newUsername != null && !newUsername.equals(this.username)) {
             this.username = newUsername;
@@ -57,10 +51,10 @@ public class User implements Serializable {
             this.password = newPassword;
             anyValueUpdated = true;
         }
-//        if (newProfileId != null && !newProfileId.equals(this.profileId)) {
-//            this.profileId = newProfileId;
-//            anyValueUpdated = true;
-//        }
+        if (newProfileId != null && !newProfileId.equals(this.profileId)) {
+            this.profileId = newProfileId;
+            anyValueUpdated = true;
+        }
 
         if (anyValueUpdated) {
             this.updatedAt = Instant.ofEpochSecond(Instant.now().getEpochSecond());
