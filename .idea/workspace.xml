@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2129b70f-f7a7-429e-a313-315e92ddecf6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/ChannelController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/MessageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/exception/ExceptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/BinaryContentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sprint_mission_4_base/src/main/java/com/sprint/mission/discodeit/controller/BinaryContentController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,9 +57,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2x7QPrUDrQZmLSy0x6yjR9ts0vE" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -83,16 +81,21 @@
     "Spring Boot.DiscodeitApplication.executor": "Run",
     "git-widget-placeholder": "임정현-sprint4",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/red29/IdeaProjects/sprint_mission_4_hint",
+    "last_opened_file_path": "C:/Users/red29/IdeaProjects/chap09-rest-api-lecture-source",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Language Defaults",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\red29\3-sprint-mission\sprint_mission_4_base\src\main\resources" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="DiscodeitApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="discodeit.main" />
@@ -119,6 +122,8 @@
       <option name="presentableId" value="Default" />
       <updated>1747286611266</updated>
       <workItem from="1747286612509" duration="6039000" />
+      <workItem from="1747294295805" duration="6339000" />
+      <workItem from="1747354011100" duration="2760000" />
     </task>
     <servers />
   </component>
