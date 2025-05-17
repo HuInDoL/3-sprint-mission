@@ -31,8 +31,9 @@ public class BinaryContentController {
     }
 
     @RequestMapping(
-            value = "/findAll"
-            , method = RequestMethod.GET)
+            value = "/findAllByIdIn"
+            , method = RequestMethod.GET
+    )
     public ResponseEntity<List<BinaryContent>> findAllByIdIn(
             @RequestParam List<UUID> binaryContentIds
     ) {

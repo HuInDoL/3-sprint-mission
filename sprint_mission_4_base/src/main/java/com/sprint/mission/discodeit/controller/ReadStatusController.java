@@ -63,9 +63,10 @@ public class ReadStatusController {
             method = RequestMethod.GET
     )
     @ResponseBody
-    public ResponseEntity<List<ReadStatus>> getUserReadStatus(
+    public ResponseEntity<List<ReadStatus>> findAllByUserId(
             @RequestParam UUID userId
     ) {
+        // ReadStatus가 없을 시 Error 메시지(or 페이지)
         List<ReadStatus> userReadStatuses = readStatusService.findAllByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userReadStatuses);
     }
