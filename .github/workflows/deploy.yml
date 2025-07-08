@@ -99,7 +99,15 @@ jobs:
         env:
           IMAGE_URI: ${{ vars.ECR_REPOSITORY_URI }}:${{ github.sha }}
         run: |
-          jq --arg IMAGE "$IMAGE_URI" '.containerDefinitions[0].image = $IMAGE' task-definition.json > updated-task-def.json
+          jq --arg IMAGE "$IMAGE_URI" '
+          .containerDefinitions |= map(
+            if .name == "discodeit-app" then
+            .image = $IMAGE
+            else .
+            end
+          )
+          ' task-definition.json > updated-task-def.json
+
 
       # 4. 기존 ECS 서비스 중지 (스케일 0)
       - name: Deregister previous ECS service (scale down to 0)
@@ -109,11 +117,24 @@ jobs:
             --service ${{ vars.ECS_SERVICE }} \
             --desired-count 0  # [요구사항] 프리티어 고려해 실행 중지
 
+      # 4.5 등록 가능한 필드만 남기기 (불필요한 필드 제거)
+      - name: Clean task definition JSON for registration
+        run: |
+          jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' updated-task-def.json > clean-task-def.json
+
       # 5. 새 태스크 정의 등록 (업데이트된 이미지 포함)
       - name: Register new task definition
         run: |
           aws ecs register-task-definition \
-            --cli-input-json file://updated-task-def.json > new-task-def.json
+            --cli-input-json file://clean-task-def.json > new-task-def.json
           echo "TASK_DEF_ARN=$(jq -r '.taskDefinition.taskDefinitionArn' new-task-def.json)" >> $GITHUB_ENV
 
       # 6. 새 태스크 정의로 ECS 서비스 업데이트 및 재시작
