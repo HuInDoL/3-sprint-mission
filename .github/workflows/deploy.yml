@@ -36,12 +36,13 @@ jobs:
 
       # 4. Public ECR에 로그인
       - name: Login to Amazon Public ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 493512621987.dkr.ecr.us-east-1.amazonaws.com
+
 
       # 5. Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker Image to Public ECR
         env:
-          ECR_REGISTRY: ${{ vars.ECR_REPOSITORY_URI }} # ex) public.ecr.aws/abc123/discodeit
+          ECR_REGISTRY: ${{ vars.ECR_REPOSITORY_URI }}
           IMAGE_TAG: ${{ github.sha }} # 커밋 해시 기반 태그
         run: |
           # 1. 명령어 실패 시 워크플로우 종료
@@ -79,7 +80,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}  # [요구사항] ECS 클러스터 접근에 필요한 리전 사용
+          aws-region: ${{ vars.AWS_REGION }}  # [요구사항] ECS 클러스터 접근에 필요한 리전 사용: ap-north-2
 
       # 2. 현재 실행 중인 ECS 서비스 중단 (스케일 0)
       - name: Deregister previous ECS service (scale down to 0)
