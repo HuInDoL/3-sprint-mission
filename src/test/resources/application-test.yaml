@@ -46,3 +46,45 @@ discodeit:
       bucket: ${AWS_S3_BUCKET}
       region: ${AWS_REGION:ap-northeast-2}
       presigned-url-expiration: ${AWS_S3_PRESIGNED_URL_EXPIRATION:600} # (기본값: 10분)
+
+# =============================
+# [통합테스트용 설정 - 실제 PostgreSQL 컨테이너 연결]
+# =============================
+# 아래 설정을 활성화하면 통합테스트에서 실제 PostgreSQL 컨테이너(DB)와 연결할 수 있습니다.
+# (예: GitHub Actions, Docker Compose 환경 등)
+#
+# spring:
+#   datasource:
+#     url: jdbc:postgresql://postgres:5432/discodeit
+#     driver-class-name: org.postgresql.Driver
+#     username: discodeit_user
+#     password: discodeit1234
+#
+#   jpa:
+#     hibernate:
+#       ddl-auto: create-drop
+#     show-sql: true
+#     properties:
+#       hibernate:
+#         format_sql: true
+#         dialect: org.hibernate.dialect.PostgreSQLDialect
+#         use_sql_comments: true
+#         default_schema: discodeit
+#     open-in-view: false
+#     defer-datasource-initialization: true
+#
+#   sql:
+#     init:
+#       mode: always
+#
+# logging:
+#   level:
+#     root: info
+#     org.hibernate.SQL: debug
+#     org.hibernate.type.descriptor.sql.BasicBinder: trace
+#
+# server:
+#   port: 0
+# =============================
+# [통합테스트용 설정 끝]
+# =============================
