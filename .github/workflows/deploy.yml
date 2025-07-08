@@ -65,13 +65,13 @@ jobs:
           # Public ECR에 이미지 푸시
           echo "Pushing Docker image to ECR..."
           # ECR에 이미지 푸쉬 (커밋 해시 태그) - 실제 이미지 업로드
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY:$IMAGE_TAG
           # ECR에 이미지 푸쉬 (latest 태그) - 태그만 추가로 푸쉬 (용량 추가 없음)
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY:latest
           
           # 다음 단계에서 사용할 수 있도록 빌드된 이미지 정보를 출력
           # 이 단계의 출력값을 다른 단계에서 사용하기 위한 ID 설정 (GITHUB_OUTPUT가 변수화됨)
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
   deploy:
     name: Update ECS Service
