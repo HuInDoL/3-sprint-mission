@@ -110,19 +110,11 @@ jobs:
             --desired-count 0  # [요구사항] 프리티어 고려해 실행 중지
 
       # 5. 새 태스크 정의 등록 (업데이트된 이미지 포함)
-      - name: Register new task definition with updated image
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ vars.ECS_TASK_DEFINITION  }}
-          service: ${{ vars.ECS_SERVICE }}
-          cluster: ${{ vars.ECS_CLUSTER }}
-          wait-for-service-stability: true
-
       - name: Register new task definition
         run: |
           aws ecs register-task-definition \
-            --cli-input-json file://updated-task-def.json > result.json
-          echo "TASK_DEF_ARN=$(jq -r '.taskDefinition.taskDefinitionArn' result.json)" >> $GITHUB_ENV
+            --cli-input-json file://updated-task-def.json > new-task-def.json
+          echo "TASK_DEF_ARN=$(jq -r '.taskDefinition.taskDefinitionArn' new-task-def.json)" >> $GITHUB_ENV
 
       # 6. 새 태스크 정의로 ECS 서비스 업데이트 및 재시작
       - name: Update ECS service with new task definition
