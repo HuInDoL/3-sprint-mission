@@ -94,7 +94,6 @@ jobs:
             --cluster ${{ vars.ECS_CLUSTER }} \
             --service ${{ vars.ECS_SERVICE }} \
             --desired-count 0  # [요구사항] 프리티어 고려해 실행 중지
-            --region ${{ vars.AWS_REGION }}
 
       # 3. 새 태스크 정의 등록 (task-definition.json 기반)
       - name: Register new task definition with updated image
