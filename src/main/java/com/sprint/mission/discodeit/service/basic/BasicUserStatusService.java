@@ -52,10 +52,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    @Transactional(readOnly = true,
-        rollbackFor = Exception.class,
-        propagation = Propagation.REQUIRED,
-        isolation = Isolation.READ_COMMITTED)
+    @Transactional(readOnly = true)
     public UserStatus find(UUID userStatusId) {
         return userStatusRepository.findById(userStatusId)
             .orElseThrow(() -> new UserStatusNotFoundException(
@@ -63,6 +60,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserStatus> findAll() {
         return userStatusRepository.findAll().stream()
             .toList();

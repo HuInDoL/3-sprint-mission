@@ -100,6 +100,7 @@ public class BasicUserService implements UserService {
      * @return 조회된 유저 DTO
      */
     @Override
+    @Transactional(readOnly = true)
     public UserDto find(UUID userId) {
         log.info(SERVICE_NAME + "유저 조회 시도: userId={}", userId);
         return userRepository.findById(userId)
@@ -115,6 +116,7 @@ public class BasicUserService implements UserService {
      * @return 유저 DTO 목록
      */
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> findAll() {
         log.info(SERVICE_NAME + "전체 유저 목록 조회 시도");
         List<UserDto> result = userRepository.findAllWithProfileAndStatus()
