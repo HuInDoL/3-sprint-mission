@@ -18,12 +18,12 @@ import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,6 +42,7 @@ public class BasicUserService implements UserService {
     private final UserStatusRepository userStatusRepository;
     private final UserMapper userMapper;
     private final BinaryContentStorage binaryContentStorage;
+    private final PasswordEncoder passwordEncoder;
     private static final String SERVICE_NAME = "[UserService] ";
 
     /**
@@ -80,9 +81,12 @@ public class BasicUserService implements UserService {
                 return binaryContent;
             })
             .orElse(null);
-        String password = userCreateRequest.password();
 
-        User user = new User(username, email, password, nullableProfile);
+        String rawPassword = userCreateRequest.password();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        log.debug(SERVICE_NAME + "비밀번호 암호화 완료");
+
+        User user = new User(username, email, encodedPassword, nullableProfile);
         userRepository.saveAndFlush(user);
 
         Instant now = Instant.now();

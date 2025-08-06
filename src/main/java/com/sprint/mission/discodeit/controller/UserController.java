@@ -75,7 +75,7 @@ public class UserController implements UserApi {
         log.info(CONTROLLER_NAME + "신규 유저 생성 성공: userId={}", createdUser.id());
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(HttpStatus.OK)
             .body(createdUser);
     }
 
