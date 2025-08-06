@@ -29,9 +29,8 @@ public class AuthController implements AuthApi {
 
     private final AuthService authService;
     private final HttpServletRequest request;
-//
-    private static final String CONTROLLER_NAME = "[AuthController] ";
 
+    private static final String CONTROLLER_NAME = "[AuthController] ";
 
     /**
      * 사용자의 로그인 요청을 처리합니다.
@@ -42,11 +41,7 @@ public class AuthController implements AuthApi {
      * @param loginRequest 로그인 요청 정보 (아이디, 비밀번호 등)
      * @return {@link ResponseEntity} 로그인 성공 시 사용자 정보와 200 OK 상태를 반환
      */
-    @PostMapping(
-        value = "/login"
-//        , consumes = "application/json"        // 클라이언트가 JSON 보내고
-//        , produces = "application/json"        // 서버도 JSON 응답함
-    )
+    @PostMapping(value = "/login")
     public ResponseEntity<UserDto> login(@Valid @RequestBody LoginRequest loginRequest) {
         long startTime = System.currentTimeMillis();
 
