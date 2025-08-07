@@ -151,8 +151,9 @@ public class BasicUserService implements UserService {
 
         String newUsername = userUpdateRequest.newUsername();
         String newEmail = userUpdateRequest.newEmail();
-        String newPassword = userUpdateRequest.newPassword();
-        // username 업데이트 (null이 아닌 경우에만)
+        String rawPassword = userUpdateRequest.newPassword();
+        String newPassword = passwordEncoder.encode(rawPassword);
+
         if (newUsername != null && !newUsername.trim().isEmpty()) {
             if (userRepository.existsByUsername(newUsername) && !newUsername.equals(user.getUsername())) {
                 log.error(SERVICE_NAME + "이미 존재하는 사용자명(수정): {}", newUsername);
@@ -161,7 +162,7 @@ public class BasicUserService implements UserService {
         } else {
             newUsername = user.getUsername();
         }
-        // email 업데이트 (null이 아닌 경우에만)
+
         if (newEmail != null && !newEmail.trim().isEmpty()) {
             if (userRepository.existsByEmail(newEmail) && !newEmail.equals(user.getEmail())) {
                 log.error(SERVICE_NAME + "이미 존재하는 이메일(수정): {}", newEmail);
@@ -170,7 +171,7 @@ public class BasicUserService implements UserService {
         } else {
             newEmail = user.getEmail();
         }
-        // password 업데이트 (null이 아닌 경우에만)
+
         if (newPassword == null || newPassword.trim().isEmpty()) {
             newPassword = user.getPassword();
         }
