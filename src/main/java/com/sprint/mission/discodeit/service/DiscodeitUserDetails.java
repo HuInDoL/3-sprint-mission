@@ -19,7 +19,7 @@ public class DiscodeitUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")); // TODO 개발환경에선 어드민 권한으로 통일, 추후 수정
+        return List.of(new SimpleGrantedAuthority("ROLE_" + userDto.role().name()));
     }
 
     @Override

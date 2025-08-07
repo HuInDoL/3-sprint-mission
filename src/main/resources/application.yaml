@@ -31,6 +31,11 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
+admin:
+  username: admin
+  email: admin@discodeit.com
+  password: ${ADMIN_PASSWORD:admin1234}
+
 logging:
   level:
     root: info

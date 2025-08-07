@@ -45,7 +45,6 @@ ALTER TABLE discodeit.tbl_binary_contents
 
 CREATE TABLE IF NOT EXISTS tbl_users
 (
-    -- column level constraints
     id         UUID PRIMARY KEY, --> tbl_user_statuses user_id, tbl_messages author_id
     created_at TIMESTAMP WITH TIME ZONE  NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE,
@@ -53,7 +52,7 @@ CREATE TABLE IF NOT EXISTS tbl_users
     email      VARCHAR(100) NOT NULL UNIQUE,
     password   VARCHAR(60)  NOT NULL,
     profile_id UUID,
-    -- table level constraints
+    role VARCHAR(20) NOT NULL,
     CONSTRAINT fk_profile_id FOREIGN KEY (profile_id) REFERENCES tbl_binary_contents (id) ON DELETE SET NULL
 );
 

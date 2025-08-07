@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.controller.api.AuthApi;
 import com.sprint.mission.discodeit.dto.data.UserDto;
+import com.sprint.mission.discodeit.dto.request.user.RoleUpdateRequest;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.DiscodeitUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,11 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 인증 관련 HTTP 요청을 처리하는 컨트롤러입니다.
@@ -62,6 +62,18 @@ public class AuthController implements AuthApi {
         UserDto userDto = authService.getCurrentUserInfo(userDetails);
 
         log.debug(CONTROLLER_NAME + "사용자 정보 조회 완료: {}", userDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+    }
+
+    @PutMapping("/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateRole(
+            @RequestBody RoleUpdateRequest request
+    ) {
+
+        UserDto userDto = authService.updateRole(request);
+        log.debug(CONTROLLER_NAME + "사용자 권한 변경 완료: {}", userDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }

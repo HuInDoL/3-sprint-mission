@@ -1,7 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.data.UserDto;
+import com.sprint.mission.discodeit.dto.request.user.RoleUpdateRequest;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.AuthService;
@@ -26,6 +28,7 @@ public class BasicAuthService implements AuthService {
     private static final String SERVICE_NAME = "[AuthService] ";
 
     @Override
+    @Transactional
     public UserDto getCurrentUserInfo(DiscodeitUserDetails userDetails) {
 
         log.debug(SERVICE_NAME + "현재 사용자 정보 조회 요청");
@@ -40,5 +43,17 @@ public class BasicAuthService implements AuthService {
         log.debug(SERVICE_NAME + "DTO 변환 완료: {}", userDto);
 
         return userDto;
+    }
+
+    @Override
+    @Transactional
+    public UserDto updateRole(RoleUpdateRequest request) {
+
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new UserNotFoundException("사용자가 존재하지 않습니다."));
+
+        user.updateRole(request.newRole());
+
+        return userMapper.toDto(user);
     }
 }
