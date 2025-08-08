@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -35,11 +37,11 @@ public class BasicAuthService implements AuthService {
 
         log.debug(SERVICE_NAME + "현재 사용자 정보 조회 요청");
 
-        String username = userDetails.getUsername();
-        log.debug(SERVICE_NAME + "조회할 사용자명: {}", username);
+        UUID userId = userDetails.getUserDto().id();
+        log.debug(SERVICE_NAME + "조회할 사용자 ID: {}", userId);
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다: " + userId));
 
         UserDto userDto = userMapper.toDto(user);
         log.debug(SERVICE_NAME + "DTO 변환 완료: {}", userDto);

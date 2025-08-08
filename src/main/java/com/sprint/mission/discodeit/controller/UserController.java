@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -98,6 +99,7 @@ public class UserController implements UserApi {
      * @param profile 프로필 이미지 파일(선택)
      * @return 수정된 유저 DTO
      */
+    @PreAuthorize("@basicUserService.isUserOwner(#userId, authentication.principal.userDto.id)")
     @PatchMapping(
         path = "/{userId}",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -126,6 +128,7 @@ public class UserController implements UserApi {
      * @param userId 삭제할 유저 ID
      * @return HTTP 204 No Content
      */
+    @PreAuthorize("@basicUserService.isUserOwner(#userId, authentication.principal.userDto.id)")
     @Parameter(name = "userId", description = "삭제할 User ID", required = true)
     @Override
     @DeleteMapping(path = "/{userId}")

@@ -149,6 +149,10 @@ public class BasicUserService implements UserService {
         String newUsername = userUpdateRequest.newUsername();
         String newEmail = userUpdateRequest.newEmail();
         String rawPassword = userUpdateRequest.newPassword();
+
+        if (rawPassword == null || rawPassword.trim().isEmpty()) {
+            rawPassword = user.getPassword();
+        }
         String newPassword = passwordEncoder.encode(rawPassword);
 
         if (newUsername != null && !newUsername.trim().isEmpty()) {
@@ -169,9 +173,6 @@ public class BasicUserService implements UserService {
             newEmail = user.getEmail();
         }
 
-        if (newPassword == null || newPassword.trim().isEmpty()) {
-            newPassword = user.getPassword();
-        }
 
         BinaryContent nullableProfile = optionalProfileCreateRequest
             .map(profileRequest -> {
@@ -241,5 +242,10 @@ public class BasicUserService implements UserService {
                 principal != null ? principal.getClass().getName() : "null");
 
         return null;
+    }
+
+    @Override
+    public boolean isUserOwner(UUID targetUserId, UUID currentUserId) {
+        return targetUserId.equals(currentUserId);
     }
 }
