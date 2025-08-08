@@ -6,23 +6,22 @@ import com.sprint.mission.discodeit.dto.request.user.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.request.user.UserUpdateRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.user.DuplicatedUserException;
+import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.repository.UserStatusRepository;
+import com.sprint.mission.discodeit.service.DiscodeitUserDetails;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
-import com.sprint.mission.discodeit.exception.user.DuplicatedUserException;
-import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,10 +38,11 @@ public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
     private final BinaryContentRepository binaryContentRepository;
-    private final UserStatusRepository userStatusRepository;
     private final UserMapper userMapper;
     private final BinaryContentStorage binaryContentStorage;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
+
     private static final String SERVICE_NAME = "[UserService] ";
 
     /**
@@ -89,11 +89,6 @@ public class BasicUserService implements UserService {
         User user = new User(username, email, encodedPassword, nullableProfile);
         userRepository.saveAndFlush(user);
 
-        Instant now = Instant.now();
-        UserStatus userStatus = new UserStatus(user, now);
-        user.setStatus(userStatus);
-        userStatusRepository.save(userStatus);
-
         log.info(SERVICE_NAME + "신규 유저 생성 성공: userId={}", user.getId());
         return userMapper.toDto(user);
     }
@@ -109,6 +104,7 @@ public class BasicUserService implements UserService {
         log.info(SERVICE_NAME + "유저 조회 시도: userId={}", userId);
         return userRepository.findById(userId)
             .map(userMapper::toDto)
+            .map(userDto -> UserDto.withOnlineStatus(userDto, isOnline(userDto.username())))
             .orElseThrow(() -> {
                 log.error(SERVICE_NAME + "유저 없음: userId={}", userId);
                 return new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
@@ -123,9 +119,10 @@ public class BasicUserService implements UserService {
     @Transactional(readOnly = true)
     public List<UserDto> findAll() {
         log.info(SERVICE_NAME + "전체 유저 목록 조회 시도");
-        List<UserDto> result = userRepository.findAllWithProfileAndStatus()
+        List<UserDto> result = userRepository.findAllWithProfile()
             .stream()
             .map(userMapper::toDto)
+            .map(userDto -> UserDto.withOnlineStatus(userDto, isOnline(userDto.username())))
             .toList();
         log.info(SERVICE_NAME + "전체 유저 목록 조회 성공: 건수={}", result.size());
         return result;
@@ -214,5 +211,35 @@ public class BasicUserService implements UserService {
         }
         userRepository.deleteById(userId);
         log.info(SERVICE_NAME + "유저 삭제 성공: userId={}", userId);
+    }
+
+    private boolean isOnline(String username) {
+        if (username == null) {
+            return false;
+        }
+
+        return sessionRegistry.getAllPrincipals().stream()
+                .anyMatch(principal -> {
+                    String principalUsername =  getPrincipalUsername(principal);
+
+                    if (!username.equals(principalUsername)) return false;
+
+                    return !sessionRegistry.getAllSessions(principal, false).isEmpty();
+                });
+    }
+
+    private String getPrincipalUsername(Object principal) {
+        if (principal instanceof DiscodeitUserDetails userDetails) {
+            return userDetails.getUsername();
+        } else if (principal instanceof org.springframework.security.core.userdetails.User user) {
+            return user.getUsername();
+        } else if (principal instanceof String name) {
+            return name;
+        }
+
+        log.warn(SERVICE_NAME + "예상치 못한 principal 타입: {}",
+                principal != null ? principal.getClass().getName() : "null");
+
+        return null;
     }
 }

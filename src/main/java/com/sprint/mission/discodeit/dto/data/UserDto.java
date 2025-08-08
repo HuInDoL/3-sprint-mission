@@ -12,5 +12,14 @@ public record UserDto(
     Boolean online,
     Role role
 ) {
-
+    public static UserDto withOnlineStatus(UserDto userDto, boolean online) {
+        return new UserDto(
+                userDto.id(),
+                userDto.username(),
+                userDto.email(),
+                userDto.profile(),
+                online,
+                userDto.role()
+        );
+    }
 }
