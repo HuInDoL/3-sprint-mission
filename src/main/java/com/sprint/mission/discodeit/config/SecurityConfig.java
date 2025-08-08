@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.handler.CustomAccessDeniedHandler;
 import com.sprint.mission.discodeit.handler.CustomAuthenticationEntryPoint;
 import com.sprint.mission.discodeit.handler.LoginFailureHandler;
 import com.sprint.mission.discodeit.handler.LoginSuccessHandler;
+import com.sprint.mission.discodeit.service.DiscodeitUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +71,8 @@ public class SecurityConfig {
             LoginFailureHandler loginFailureHandler,
             CustomAccessDeniedHandler accessDeniedHandler,
             CustomAuthenticationEntryPoint authenticationEntryPoint,
-            SessionRegistry sessionRegistry) throws Exception {
+            SessionRegistry sessionRegistry,
+            DiscodeitUserDetailsService discodeitUserDetailsService) throws Exception {
 
         log.info(CONFIG_NAME + "FilterChain 구성 시작");
 
@@ -111,10 +113,17 @@ public class SecurityConfig {
                         .failureHandler(loginFailureHandler)
                         .permitAll()
                 )
+                .rememberMe(remember -> remember
+                        .key("discodeit-remember-me-key")
+                        .tokenValiditySeconds(60 * 60)
+                        .rememberMeCookieName("remember-me")
+                        .rememberMeParameter("remember-me")
+                        .userDetailsService(discodeitUserDetailsService)
+                )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("JSESSIONID", "remember-me")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
