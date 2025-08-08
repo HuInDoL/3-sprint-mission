@@ -52,4 +52,9 @@ public class DiscodeitUserDetails implements UserDetails {
     public int hashCode() {
         return Objects.hash(userDto.id(), userDto.username());
     }
+
+    @Override
+    public String toString() {
+        return "DiscodeitUserDetails(userDto=" + userDto + ", password=[PROTECTED])";
+    }
 }
